@@ -1,0 +1,20 @@
+.root {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .input, .output {
+    box-sizing: border-box;
+    max-width: 190px;
+    margin: 5px;
+    padding: 10px 2px;
+    text-align: center;
+    font-size: 22px;
+  }
+  
+  .output {
+    color: #ffffff;
+  }
+  
