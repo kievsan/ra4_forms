@@ -18,7 +18,7 @@ export default function Steps() {
         input_distance: '',
     })
 
-    const [itemList, setItemList] = useState([]); // <List />
+    const [itemList, setItemList] = useState(walks.Trainings); // <List />
 
     const handlerDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setWalk(prevWalk => ({...prevWalk, input_date: event.target.value}));

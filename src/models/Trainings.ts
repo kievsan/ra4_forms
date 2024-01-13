@@ -1,12 +1,14 @@
 import { nanoid } from 'nanoid';
 
+import { HomeWalk } from '../types';
+
 
 export class Walks {
     private _mainStart: Date = new Date();
     private _mainDescription: string = "Тренировочные пешие прогулки";
     private _mainStructure: string; 
-    
-    private _tranings = []; // дефолтное значение списка занятий
+
+    private _tranings: Array<HomeWalk> = []; // дефолтное значение списка занятий
 
     constructor(structure: string) {
         this._mainStructure = structure;
@@ -21,6 +23,10 @@ export class Walks {
             start: this._mainStart, 
             structure: this._mainStructure, 
         }
+    }
+
+    public get Trainings() {
+        return this._tranings
     }
 
 }
