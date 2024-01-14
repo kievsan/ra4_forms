@@ -46,17 +46,41 @@ export default function Steps() {
     };
     
     return(
-        <form onSubmit={handlerSubmit}>
-            <div>
-                <label htmlFor='date'>Дата</label>
-                <input type='date' id='date' name='date' value={form.date.toString()} onChange={handlerDateChange} required/>
-            </div>                
-            <div>
-                <label htmlFor='distance'>Пройдено (км)</label>
-                <input type='number' id='distance' name='distance' value={form.distance} onChange={handlerNumberChange} required/>
+        <>
+            <form onSubmit={handlerSubmit}>
+                <div>
+                    <label htmlFor='date'>Дата</label>
+                    <input type='date' id='date' name='date' value={form.date.toString()} onChange={handlerDateChange} required/>
+                </div>                
+                <div>
+                    <label htmlFor='distance'>Пройдено (км)</label>
+                    <input type='number' id='distance' name='distance' value={form.distance} onChange={handlerNumberChange} required/>
+                </div>
+                <button type='submit'>OK</button>
+            </form>
+
+            <div className={classes['walkings']}>
+                <div className={classes['walkings-headers']}>
+                    <div>Дата (ДД.ММ.ГГ)</div>
+                    <div>Пройдено (км)</div>
+                    <div>Действия</div>
+                </div>
+                <ul className={classes['walkings-data']}>
+                    {
+                        walkings.list.map(walk => 
+                            <li key={walk.id}>
+                                <span>{walk.date.toLocaleDateString().substring(0,10)}</span>
+                                <span>{walk.distance}</span>
+                                <div>
+                                    <button onClick={ () => handlerEdit(walk)}><i className='material-icons'>edit</i></button>
+                                    <button onClick={ () => handlerDel(walk.id)}><i className='material-icons'>delete</i></button>
+                                </div>
+                            </li>
+                        )
+                    }
+                </ul>
             </div>
-            <button type='submit'>OK</button>
-        </form>
+        </>
     );
 }
 

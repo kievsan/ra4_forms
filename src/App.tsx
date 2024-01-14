@@ -1,7 +1,10 @@
 import InputColor from "./components/hex2rgb/Hex2Rgb";
-import Steps from "./components/steps/Steps";
 
-import { fitnessWalksBaseData  as walkings } from "./models/Trainings";
+import Steps from "./components/steps/StepsMonolit";
+import handlerDel from "./components/steps/Steps";
+import handlerEdit from "./components/steps/Steps";
+
+import List from "./components/steps/WalkList";
 
 import classes from './App.module.css'
 
@@ -12,8 +15,8 @@ function App() {
       <InputColor />
       <div className={classes["Steps"]}>
         <Steps />
-      </div>
-      
+        <List onDelete={handlerDel} onEdit={handlerEdit}/>
+      </div>      
     </>
   );
 }

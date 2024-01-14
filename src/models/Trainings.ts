@@ -33,12 +33,7 @@ export class Walkings {
             this.Add(walk);
         } else {
             walk.distance = (+distance);
-            if (walk.distance > 0) {
-                this._tranings[idx] = walk;
-                this.sortDescDate();
-            } else {
-                this.Del(walk.id);
-            }
+            walk.distance > 0 ? this._tranings[idx] = walk : this.Del(walk.id);
         }
     }
 
