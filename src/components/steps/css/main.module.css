@@ -41,20 +41,20 @@ form {
     /* column-count: 3; */
   }
   
-  .workouts-data {
+  .walkings-data {
     border: 2px solid black;
     border-radius: 10px;
     padding: 15px;
   }
   
-  .workouts-data li {
+  .walkings-data li {
     list-style-type: none;
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
   
-  .workouts-data button {
+  .walkings-data button {
     background: none;
     border: none;
   }

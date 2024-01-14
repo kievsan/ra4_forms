@@ -1,5 +1,3 @@
-import { nanoid } from 'nanoid';
-
 import { FitnessWalk } from '../types';
 
 
@@ -29,13 +27,18 @@ export class Walkings {
         return this._tranings;
     }
 
-    public Edit(walk: FitnessWalk) {
+    public Edit(walk: FitnessWalk, date: Date, distance: number) {
         const idx = this._tranings.indexOf(walk);
         if (idx === -1) {
             this.Add(walk);
         } else {
-            this._tranings[idx] = walk;
-            this.sortDescDate();
+            walk.distance = (+distance);
+            if (walk.distance > 0) {
+                this._tranings[idx] = walk;
+                this.sortDescDate();
+            } else {
+                this.Del(walk.id);
+            }
         }
     }
 
@@ -45,9 +48,11 @@ export class Walkings {
 
     public Add(walk: FitnessWalk): number {
         let len = this._tranings.length;
+        walk.distance = (+walk.distance);
+        if (walk.distance <= 0) return len;
         const existing_walk = this.walkByDate(walk.date);
         if (existing_walk) {
-            const idx = this._tranings.indexOf(walk);
+            const idx = this._tranings.indexOf(existing_walk);
             this._tranings[idx].distance += walk.distance;
         } else {
             walk.id = this._newId();

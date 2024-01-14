@@ -1,44 +1,48 @@
 import React, { useState } from 'react';
 
-import { FitnessWalk } from '../../types';
-import { Walkings, fitnessWalksBaseData  as walkings } from "../../models/Trainings";
+import { FitnessWalk, Mode } from '../../types';
+import { fitnessWalksBaseData  as walkings } from "../../models/Trainings";
 
 import classes from './css/main.module.css'
 
 
 export default function Steps() {
-
-    const [walkList, setWalkList] = useState(walkings);
-    //const [form, setForm] = useState({date: '', distance: ''});
     const [form, setForm] = useState({
         date: new Date(),
-        distance: 0.0,
-    })
+        distance: 0,
+    });
+    const [modeSwitch, setSwitch] = useState({
+        isEditMode: false,
+        walk: nullFitnessWalk,
+    });
     
-    const handlerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handlerDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target;
         setForm(prevForm => ({...prevForm, [name]: value}));
     };
+    
+    const handlerNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const {name, value} = event.target;
+        setForm(prevForm => ({...prevForm, [name]: validFloat(value)}));
+    };
 
     const handlerSubmit = (event: React.FormEvent) => {            
-            event.preventDefault();
-
-            form.distance = form.distance < 0 ? form.distance = 0 : form.distance;
-
-            walkings.Add({ id: 0, date: new Date(form.date), distance: (+form.distance) });
-            setWalkList(walkings);
-            setForm({date: new Date(), distance: 0.0});
+        event.preventDefault();        
+        modeSwitch.isEditMode 
+            ? walkings.Edit(modeSwitch.walk, form.date, form.distance) 
+            : walkings.Add({ id: 0, date: form.date, distance: form.distance });
+        setForm({date: new Date(), distance: 0});
+        setSwitch({isEditMode: false, walk: nullFitnessWalk});
     };
 
     const handlerDel = (id: number) => {
         walkings.Del(id);
-        setWalkList(walkings);
+        setForm({date: new Date(), distance: 0});
     };
 
     const handlerEdit = (walk: FitnessWalk) => {
-        walkings.Edit(walk);
-        setWalkList(walkings);
-        setForm({date: new Date(), distance: 0.0});
+        setSwitch(mode(true, walk));
+        setForm({date: walk.date, distance: walk.distance});
     };
     
     return(
@@ -46,13 +50,12 @@ export default function Steps() {
             <form onSubmit={handlerSubmit}>
                 <div>
                     <label htmlFor='date'>Дата</label>
-                    <input type='date' id='date' name='date' value={form.date.toString()} onChange={handlerChange} required></input>
+                    <input type='date' id='date' name='date' value={form.date.toString()} onChange={handlerDateChange} required/>
                 </div>                
                 <div>
                     <label htmlFor='distance'>Пройдено (км)</label>
-                    <input type='number' id='distance' name='distance' value={form.distance} onChange={handlerChange} required></input>
+                    <input type='number' id='distance' name='distance' value={form.distance} onChange={handlerNumberChange} required/>
                 </div>
-
                 <button type='submit'>OK</button>
             </form>
 
@@ -62,10 +65,9 @@ export default function Steps() {
                     <div>Пройдено (км)</div>
                     <div>Действия</div>
                 </div>
-
-                <ul className={classes['workouts-data']}>
+                <ul className={classes['walkings-data']}>
                     {
-                        walkList.list.map(walk => 
+                        walkings.list.map(walk => 
                             <li key={walk.id}>
                                 <span>{walk.date.toLocaleString('ru-RU',).substring(0,10)}</span>
                                 <span>{walk.distance}</span>
@@ -77,9 +79,21 @@ export default function Steps() {
                         )
                     }
                 </ul>
-
-
             </div>
         </>
     );
+}
+
+const validFloat = (num: string): number => {
+    const fnum = parseFloat(num) ?? 0.0;
+    return fnum > 0 ? fnum : 0.0;    
+}
+
+const nullFitnessWalk: FitnessWalk = { id: 0, date: new Date(), distance: 0 }
+
+const mode = (isEdit: boolean, walk: FitnessWalk): Mode => {
+    return {
+        isEditMode: isEdit, 
+        walk: isEdit ? walk : nullFitnessWalk
+    };
 }
