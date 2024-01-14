@@ -1,81 +1,85 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState } from 'react';
 
-import List from "./TrainingWalks";
-import { walksBaseData  as walks } from "../../models/Trainings";
-import { HomeWalk } from "../../types";
+import { FitnessWalk } from '../../types';
+import { Walkings, fitnessWalksBaseData  as walkings } from "../../models/Trainings";
 
 import classes from './css/main.module.css'
-
-let dateValue = '';
-let distanceValue = ''; 
 
 
 export default function Steps() {
 
-    const [walk, setWalk] = useState({
-        input_date: '',
-        input_distance: '',
+    const [walkList, setWalkList] = useState(walkings);
+    //const [form, setForm] = useState({date: '', distance: ''});
+    const [form, setForm] = useState({
+        date: new Date(),
+        distance: 0.0,
     })
+    
+    const handlerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const {name, value} = event.target;
+        setForm(prevForm => ({...prevForm, [name]: value}));
+    };
 
-    const [itemList, setItemList] = useState(walks.Trainings); // <List />
+    const handlerSubmit = (event: React.FormEvent) => {            
+            event.preventDefault();
 
-    const handlerDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setWalk(prevWalk => ({...prevWalk, input_date: event.target.value}));
+            form.distance = form.distance < 0 ? form.distance = 0 : form.distance;
 
-    }
+            walkings.Add({ id: 0, date: new Date(form.date), distance: (+form.distance) });
+            setWalkList(walkings);
+            setForm({date: new Date(), distance: 0.0});
+    };
 
-    const handlerDistanceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setWalk(prevWalk => ({...prevWalk, input_distance: event.target.value}));
+    const handlerDel = (id: number) => {
+        walkings.Del(id);
+        setWalkList(walkings);
+    };
 
-    }
+    const handlerEdit = (walk: FitnessWalk) => {
+        walkings.Edit(walk);
+        setWalkList(walkings);
+        setForm({date: new Date(), distance: 0.0});
+    };
+    
+    return(
+        <>
+            <form onSubmit={handlerSubmit}>
+                <div>
+                    <label htmlFor='date'>Дата</label>
+                    <input type='date' id='date' name='date' value={form.date.toString()} onChange={handlerChange} required></input>
+                </div>                
+                <div>
+                    <label htmlFor='distance'>Пройдено (км)</label>
+                    <input type='number' id='distance' name='distance' value={form.distance} onChange={handlerChange} required></input>
+                </div>
 
-    const handlerSubmit = (event: any) => { // "Enter"
-        event.preventDefault();
-        if ((dateValue !== '') && (distanceValue !== '')) {
-        }
-    }
-
-    const handlerAddClick = (event: any) => { // "добавить"
-        event.preventDefault();
-        if ((dateValue !== '') && (distanceValue !== '')) {
-        }
-    }
-
-    const handlerDelClick = (event: any) => { // КРЕСТИК "удалить"
-        const { target } = event;
-        const id = target.parentElement.id;
-        console.log('removed ID = ', id);   //
-        setItemList(itemList.filter((item: HomeWalk) => item.id !== id));
-    }
-
-
-    return (
-    <main className={classes["content"]}>
-        <div className={classes["card"]}>
-            <div className={classes["tasks"]} id="tasks">
-            <form className={classes["tasks__control"]} onSubmit={handlerSubmit} id="tasks__form">
-
-                <label htmlFor="input__date">Дата (ДД.ММ.ГГ)
-                    <input className={classes["tasks__input"]} name="input__date" id="input__date" 
-                        type="text" 
-                        placeholder="Введите дату"
-                        value={walk.input_date}
-                        onChange={handlerDateChange} />
-                </label>
-
-                <label htmlFor="input__distance">Пройдено (км)
-                    <input className={classes["tasks__input"]} name="input__distance" id="input__distance" 
-                        type="text" 
-                        placeholder="Введите расстояние"
-                        value={walk.input_date}
-                        onChange={handlerDistanceChange} />
-                </label>
-
+                <button type='submit'>OK</button>
             </form>
-            <List itemList={itemList} onDel={handlerDelClick}/>
+
+            <div className={classes['walkings']}>
+                <div className={classes['walkings-headers']}>
+                    <div>Дата (ДД.ММ.ГГ)</div>
+                    <div>Пройдено (км)</div>
+                    <div>Действия</div>
+                </div>
+
+                <ul className={classes['workouts-data']}>
+                    {
+                        walkList.list.map(walk => 
+                            <li key={walk.id}>
+                                <span>{walk.date.toLocaleString('ru-RU',).substring(0,10)}</span>
+                                <span>{walk.distance}</span>
+                                <div>
+                                    <button onClick={ () => handlerEdit(walk)}><i className='material-icons'>edit</i></button>
+                                    <button onClick={ () => handlerDel(walk.id)}><i className='material-icons'>delete</i></button>
+                                </div>
+                            </li>
+                        )
+                    }
+                </ul>
+
+
             </div>
-        </div>
-    </main>
-    )
+        </>
+    );
 }

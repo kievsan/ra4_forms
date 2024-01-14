@@ -4,8 +4,8 @@ export type RGB = {
     b: number,
 }
 
-export type HomeWalk = {
-    id: string, 
-    date_str: string, 
-    distance: string,
+export interface FitnessWalk {
+    id: number,
+    date: Date, 
+    distance: number,
 }

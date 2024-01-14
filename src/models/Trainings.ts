@@ -1,20 +1,20 @@
 import { nanoid } from 'nanoid';
 
-import { HomeWalk } from '../types';
+import { FitnessWalk } from '../types';
 
 
-export class Walks {
-    private _mainStart: Date = new Date();
-    private _mainDescription: string = "Тренировочные пешие прогулки";
+export class Walkings {
+    private _mainStart = new Date();
+    private _mainDescription = "Тренировочные пешие прогулки";
     private _mainStructure: string; 
 
-    private _tranings: Array<HomeWalk> = []; // дефолтное значение списка занятий
+    private _tranings = new Array<FitnessWalk>(); // дефолтное значение списка занятий
 
     constructor(structure: string) {
         this._mainStructure = structure;
         // Make singleton
-        if ('instance' in Walks) return Object.getOwnPropertyDescriptor(Walks, 'instance')?.value;
-        Object.assign(Walks, { instance: this });
+        if ('instance' in Walkings) return Object.getOwnPropertyDescriptor(Walkings, 'instance')?.value;
+        Object.assign(Walkings, { instance: this });
     }
 
     public get Info() {
@@ -25,10 +25,67 @@ export class Walks {
         }
     }
 
-    public get Trainings() {
-        return this._tranings
+    public get list(): FitnessWalk[] {
+        return this._tranings;
     }
 
+    public Edit(walk: FitnessWalk) {
+        const idx = this._tranings.indexOf(walk);
+        if (idx === -1) {
+            this.Add(walk);
+        } else {
+            this._tranings[idx] = walk;
+            this.sortDescDate();
+        }
+    }
+
+    public Del(id: number) {
+        this._tranings = this._tranings.filter(walk => walk.id != id);
+    }
+
+    public Add(walk: FitnessWalk): number {
+        let len = this._tranings.length;
+        const existing_walk = this.walkByDate(walk.date);
+        if (existing_walk) {
+            const idx = this._tranings.indexOf(walk);
+            this._tranings[idx].distance += walk.distance;
+        } else {
+            walk.id = this._newId();
+            this._tranings.push(walk);
+            len += 1;
+            this.sortDescDate();
+        }        
+        return len;
+    }
+
+    private _newId(): number {
+        const el = this._tranings.reduce( (prev, it) => prev.id > it.id ? prev : it, {id: 0} );
+        return Number(el.id)+ 1;
+    }
+
+    public sortAscDate(): void {
+        this._tranings.sort((a, b) => {
+            if (a.date < b.date) return -1;
+            if (a.date > b.date) return 1;
+            return 0;
+        })
+    }
+
+    public sortDescDate(): void {
+        this._tranings.sort((a, b) => {
+            if (a.date > b.date) return -1;
+            if (a.date < b.date) return 1;
+            return 0;
+        })
+    }
+
+    public walkByID(id: number): FitnessWalk | undefined {
+        return this._tranings.find(walk => walk.id === id);
+    }
+
+    public walkByDate(date: Date): FitnessWalk | undefined {
+        return this._tranings.find(walk => walk.date === date);
+    }
 }
 
-export const walksBaseData = new Walks("Дата / Пройдено (км)");
+export const fitnessWalksBaseData = new Walkings("Дата / Пройдено (км)");
