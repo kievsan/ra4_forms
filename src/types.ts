@@ -14,3 +14,8 @@ export interface FitnessWalk {
     date: Date, 
     distance: number,
 }
+
+export interface WalkListHandlers { 
+    onEdit(walk: FitnessWalk): void, 
+    onDelete(id: number): void ,
+}

@@ -4,12 +4,9 @@ import { FitnessWalk, Mode } from '../../types';
 import { fitnessWalksBaseData  as walkings } from "../../models/Trainings";
 
 import List from './WalkList';
-//import Walking from './Walking';
-
-import classes from './css/main.module.css';
 
 
-export default function Steps() {
+export default function Steps(props: {}) {
     const [form, setForm] = useState({
         date: new Date(),
         distance: 0,
@@ -71,11 +68,11 @@ const validFloat = (num: string): number => {
     return fnum > 0 ? fnum : 0.0;    
 }
 
-const nullFitnessWalk: FitnessWalk = { id: 0, date: new Date(), distance: 0 }
-
 const mode = (isEdit: boolean, walk: FitnessWalk): Mode => {
     return {
         isEditMode: isEdit, 
         walk: isEdit ? walk : nullFitnessWalk
     };
 }
+
+const nullFitnessWalk: FitnessWalk = { id: 0, date: new Date(), distance: 0 }
