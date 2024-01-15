@@ -58,5 +58,7 @@ form {
     background: none;
     border: none;
   }
+
+  .material-icons {}
   
   @import url('https://fonts.googleapis.com/icon?family=Material+Icons')

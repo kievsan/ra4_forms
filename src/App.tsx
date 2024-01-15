@@ -1,11 +1,7 @@
 import InputColor from "./components/hex2rgb/Hex2Rgb";
 
-import Steps from "./components/steps/StepsMonolit";
-//import Steps from "./components/steps/Steps";
-//import handlerDel from "./components/steps/Steps";
-//import handlerEdit from "./components/steps/Steps";
-
-import List from "./components/steps/WalkList";
+//import Steps from "./components/steps/StepsMonolit";
+import Steps from "./components/steps/Steps";
 
 import classes from './App.module.css'
 
@@ -16,7 +12,6 @@ function App() {
       <InputColor />
       <div className={classes["Steps"]}>
         <Steps />
-        {/* <List onDelete={handlerDel} onEdit={handlerEdit}/> */}
       </div>      
     </>
   );

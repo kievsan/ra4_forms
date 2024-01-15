@@ -3,7 +3,10 @@ import React, { useState } from 'react';
 import { FitnessWalk, Mode } from '../../types';
 import { fitnessWalksBaseData  as walkings } from "../../models/Trainings";
 
-import classes from './css/main.module.css'
+import List from './WalkList';
+//import Walking from './Walking';
+
+import classes from './css/main.module.css';
 
 
 export default function Steps() {
@@ -46,6 +49,7 @@ export default function Steps() {
     };
     
     return(
+        <>
         <form onSubmit={handlerSubmit}>
             <div>
                 <label htmlFor='date'>Дата</label>
@@ -57,6 +61,8 @@ export default function Steps() {
             </div>
             <button type='submit'>OK</button>
         </form>
+        <List onEdit={handlerEdit} onDelete={handlerDel} />
+        </>
     );
 }
 

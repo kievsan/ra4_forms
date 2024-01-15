@@ -70,7 +70,6 @@ export default function Steps() {
                         walkings.list.map(walk => 
                             <li key={walk.id}>
                                 <span>{walk.date.toString().substring(0,10)}</span>
-                                {/* <span>{walk.date.toString()}</span> */}
                                 <span>{walk.distance}</span>
                                 <div>
                                     <button onClick={ () => handlerEdit(walk)}><i className='material-icons'>edit</i></button>

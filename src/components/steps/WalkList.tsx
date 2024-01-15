@@ -1,22 +1,26 @@
-import React, { useState } from 'react';
-
 import { FitnessWalk } from '../../types';
 import { fitnessWalksBaseData  as walkings } from "../../models/Trainings";
 
 import classes from './css/main.module.css'
 
 
-export default function List(handlers: any) {
-    const { onDelete, onEdit } = handlers;
+export default function List(handlers: { 
+    onEdit(walk: FitnessWalk): void, 
+    onDelete(id: number): void 
+}) {
+    const { onEdit: handlerEdit } = handlers;
+    const { onDelete: handlerDel } = handlers;
 
-    function WalkList(walk: FitnessWalk) { // функция отрисовки элемента        
+    function Walking(walk: FitnessWalk) { // функция отрисовки элемента        
         return (
             <li key={walk.id}>
-                <span>{walk.date.toLocaleDateString().substring(0,10)}</span>
+                <span>{walk.date.toString()}</span>
                 <span>{walk.distance}</span>
                 <div>
-                    <button onClick={ () => onEdit(walk)}><i className='material-icons'>edit</i></button>
-                    <button onClick={ () => onDelete(walk.id)}><i className='material-icons'>delete</i></button>
+                    <button onClick={ () => handlerEdit(walk) }><i className='material-icons'>
+                        edit</i></button>
+                    <button onClick={ () => handlerDel(walk.id) }><i className='material-icons'>
+                        delete</i></button>
                 </div>
             </li>
         )
@@ -30,7 +34,7 @@ export default function List(handlers: any) {
                 <div>Действия</div>
             </div>
             <ul className={classes['walkings-data']}>
-                { walkings.list.map(walk => List(walk)) }
+                { walkings.list.map(walk => Walking(walk)) }
             </ul>
         </div>
     );
