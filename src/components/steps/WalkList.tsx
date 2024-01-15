@@ -9,7 +9,7 @@ export default function List({onEdit, onDelete}: WalkListHandlers) {
     function Walking(walk: FitnessWalk) { // функция отрисовки элемента        
         return (
             <li key={walk.id}>
-                <span>{walk.date.toLocaleDateString()}</span>
+                <span>{walk.date.toString()}</span>
                 <span>{walk.distance}</span>
                 <div>
                     <button onClick={ () => onEdit(walk) }><i className='material-icons'>
