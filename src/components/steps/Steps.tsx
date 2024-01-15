@@ -50,7 +50,7 @@ export default function Steps(props: {}) {
         <form onSubmit={handlerSubmit}>
             <div>
                 <label htmlFor='date'>Дата</label>
-                <input type='date' id='date' name='date' value={form.date.toString()} onChange={handlerDateChange} required/>
+                <input type='date' id='date' name='date' value={form.date.toLocaleDateString()} onChange={handlerDateChange} required/>
             </div>                
             <div>
                 <label htmlFor='distance'>Пройдено (км)</label>
