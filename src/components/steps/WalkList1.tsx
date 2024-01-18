@@ -1,23 +1,15 @@
-import { FitnessWalk } from '../../types';
-import { strDate } from './Steps';
+import { FitnessWalk, WalkListHandlers } from '../../types';
+import { fitnessWalksBaseData  as walkings } from "../../models/Trainings";
 
-import classes from './css/main.module.css';
+import classes from './css/main.module.css'
 
 
-export interface Props {
-    walkList: FitnessWalk[],
-    onEdit(walk: FitnessWalk): void, 
-    onDelete(id: number): void 
-};
+export default function List({onEdit, onDelete}: WalkListHandlers) {
 
-export default function List({walkList, onEdit, onDelete}: Props) {
-
-    function Walking(walk: FitnessWalk) { // функция отрисовки прогулки
-        console.log('render Walk', walk.date, ' : ', walk.distance);
-        
+    function Walking(walk: FitnessWalk) { // функция отрисовки прогулки        
         return (
             <li key={walk.id}>
-                <span>{strDate(walk.date)}</span>
+                <span>{walk.date.toString()}</span>
                 <span>{walk.distance}</span>
                 <div>
                     <button onClick={ () => onEdit(walk) }><i className='material-icons'>
@@ -37,7 +29,7 @@ export default function List({walkList, onEdit, onDelete}: Props) {
                 <div>Действия</div>
             </div>
             <ul className={classes['walkings-data']}>
-                { walkList.map(walk => Walking(walk)) }
+                { walkings.all.map(walk => Walking(walk)) }
             </ul>
         </div>
     );

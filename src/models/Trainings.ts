@@ -7,6 +7,7 @@ export class Walkings {
     private _mainStructure: string; 
 
     private _tranings = new Array<FitnessWalk>(); // дефолтное значение списка занятий
+    private _list = new Array<FitnessWalk>();
 
     constructor(structure: string) {
         this._mainStructure = structure;
@@ -23,8 +24,16 @@ export class Walkings {
         }
     }
 
-    public get list(): FitnessWalk[] {
+    public get all(): FitnessWalk[] {
         return this._tranings;
+    }
+
+    public get list(): FitnessWalk[] {
+        return this._list;
+    }
+
+    public set list(list: FitnessWalk[]) {
+        this._list = this._list.filter(walk => this._tranings.indexOf(walk) !== -1);
     }
 
     public Edit(walk: FitnessWalk, date: Date, distance: number) {
